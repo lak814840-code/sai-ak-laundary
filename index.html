@@ -1,365 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAI AK DRY CLEANERS</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a1a;}
-.wrap{max-width:420px;margin:0 auto;background:#fff;min-height:100vh;}
-.header{text-align:center;padding:1.4rem 1rem 1rem;border-bottom:1px solid #eee;}
-.shop-name{font-size:22px;font-weight:600;color:#1a1a1a;}
-.shop-sub{font-size:13px;color:#777;margin-top:4px;}
-.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #eee;}
-.tab{padding:12px;text-align:center;font-size:14px;font-weight:500;color:#888;cursor:pointer;border-bottom:2px solid transparent;}
-.tab.active{color:#1D9E75;border-bottom:2px solid #1D9E75;}
-.page{display:none;padding:1rem;}
-.page.active{display:block;}
-.section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin-bottom:10px;}
-.item-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #f0f0f0;}
-.item-row:last-child{border-bottom:none;}
-.item-name{font-size:14px;color:#1a1a1a;}
-.item-price{font-size:13px;color:#666;white-space:nowrap;}
-.qty-ctrl{display:flex;align-items:center;gap:8px;}
-.qty-btn{width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:18px;color:#1a1a1a;display:flex;align-items:center;justify-content:center;line-height:1;}
-.qty-btn:active{background:#f0f0f0;}
-.qty-num{font-size:14px;font-weight:600;min-width:18px;text-align:center;}
-.summary-box{background:#f9f9f9;border-radius:10px;padding:14px;margin:14px 0;}
-.summary-row{display:flex;justify-content:space-between;font-size:13px;color:#666;padding:3px 0;}
-.summary-row.total{font-size:16px;font-weight:600;color:#1a1a1a;border-top:1px solid #eee;margin-top:8px;padding-top:10px;}
-.discount-badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 7px;border-radius:20px;background:#e6f9f2;color:#0F6E56;margin-left:5px;}
-.form-group{margin-bottom:13px;}
-.form-label{font-size:13px;color:#555;margin-bottom:5px;display:block;font-weight:500;}
-.form-group input,.form-group textarea{width:100%;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#1a1a1a;outline:none;}
-.form-group input:focus,.form-group textarea:focus{border-color:#1D9E75;}
-.form-group textarea{resize:none;height:75px;}
-.btn-main{width:100%;padding:14px;border-radius:12px;border:none;background:#1D9E75;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:6px;}
-.btn-main:active{background:#0F6E56;}
-.btn-main:disabled{opacity:0.5;}
-.hint{font-size:12px;color:#999;text-align:center;margin-top:8px;}
-.success-screen{text-align:center;padding:2.5rem 1rem;}
-.success-icon{font-size:56px;color:#1D9E75;margin-bottom:14px;}
-.success-title{font-size:20px;font-weight:600;color:#1a1a1a;margin-bottom:8px;}
-.success-sub{font-size:14px;color:#666;line-height:1.7;}
-.succ-box{background:#f9f9f9;border-radius:10px;padding:14px;margin-top:16px;text-align:left;}
-.succ-box-label{font-size:12px;color:#999;margin-bottom:6px;}
-.succ-items{font-size:14px;color:#1a1a1a;line-height:1.9;}
-.succ-total{font-size:15px;font-weight:600;color:#1a1a1a;margin-top:10px;border-top:1px solid #eee;padding-top:10px;}
-.btn-outline{width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;margin-top:12px;}
-.owner-section{margin-bottom:22px;}
-.edit-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #f0f0f0;}
-.edit-row:last-child{border-bottom:none;}
-.edit-label{font-size:14px;color:#1a1a1a;font-weight:500;}
-.edit-val{font-size:12px;color:#999;margin-top:2px;}
-.edit-btn{font-size:12px;color:#1D9E75;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid #b3e6d4;background:#e6f9f2;white-space:nowrap;font-weight:500;}
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:100;align-items:center;justify-content:center;padding:1.5rem;}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:16px;padding:1.4rem;width:100%;max-width:340px;}
-.modal-title{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:14px;}
-.modal input{width:100%;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;color:#1a1a1a;outline:none;margin-bottom:10px;}
-.modal input:focus{border-color:#1D9E75;}
-.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
-.btn-save{padding:11px;border-radius:10px;border:none;background:#1D9E75;color:#fff;font-size:14px;font-weight:600;cursor:pointer;}
-.btn-cancel{padding:11px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;}
-.pin-screen{padding:2rem 1rem;text-align:center;}
-.pin-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:6px;}
-.pin-sub{font-size:13px;color:#888;margin-bottom:18px;}
-.pin-input{width:150px;text-align:center;font-size:24px;letter-spacing:10px;padding:10px;border-radius:12px;border:1px solid #ddd;color:#1a1a1a;outline:none;margin-bottom:10px;}
-.pin-input:focus{border-color:#1D9E75;}
-.pin-err{font-size:13px;color:#e53935;margin-bottom:8px;min-height:18px;}
-.disc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#1a1a1a;}
-.disc-row:last-child{border-bottom:none;}
-.disc-desc{font-size:12px;color:#999;margin-top:2px;}
-.toggle{width:40px;height:22px;border-radius:11px;background:#ddd;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
-.toggle.on{background:#1D9E75;}
-.toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 0.2s;}
-.toggle.on .toggle-knob{transform:translateX(18px);}
-.lock-btn{width:100%;padding:11px;border-radius:12px;border:1px solid #ffcdd2;background:#fff5f5;color:#c62828;font-size:14px;cursor:pointer;margin-top:4px;font-weight:500;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SAI AK Dry Cleaners – Lucknow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0f1f3d;
+      --gold: #c8973a;
+      --gold-light: #f0c96b;
+      --cream: #faf7f2;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --light: #f3ede4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 6%;
+      background: rgba(15,31,61,0.97);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--gold); letter-spacing: 0.03em;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 0.88rem; font-weight: 400; letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex; align-items: center;
+      padding: 120px 6% 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -80px;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,151,58,0.15) 0%, transparent 70%);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: -100px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,151,58,0.08) 0%, transparent 70%);
+    }
+    .hero-content { max-width: 640px; position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(200,151,58,0.4);
+      padding: 6px 16px; border-radius: 30px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      color: var(--white); line-height: 1.15;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.65);
+      line-height: 1.75; margin-bottom: 40px;
+      font-weight: 300;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
+      padding: 14px 32px; border-radius: 6px;
+      font-weight: 500; font-size: 0.95rem;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid rgba(255,255,255,0.3); color: var(--white);
+      padding: 14px 32px; border-radius: 6px;
+      font-size: 0.95rem; text-decoration: none;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    .hero-badges {
+      display: flex; gap: 24px; margin-top: 56px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .badge { text-align: center; }
+    .badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; color: var(--gold); font-weight: 700;
+    }
+    .badge-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    /* SERVICES */
+    .services {
+      padding: 100px 6%;
+      background: var(--cream);
+    }
+    .section-tag {
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--navy); margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--gray);
+      max-width: 480px; line-height: 1.7; margin-bottom: 56px;
+      font-weight: 300;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 32px 28px;
+      border: 1px solid rgba(200,151,58,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(15,31,61,0.1); }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon { font-size: 2rem; margin-bottom: 16px; }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--navy); margin-bottom: 8px;
+    }
+    .service-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.65; }
+    .service-price {
+      margin-top: 18px; padding-top: 18px;
+      border-top: 1px solid var(--light);
+      font-size: 0.82rem; color: var(--gold); font-weight: 500;
+    }
+
+    /* PRICING */
+    .pricing {
+      padding: 100px 6%;
+      background: var(--navy);
+    }
+    .pricing .section-title { color: var(--white); }
+    .pricing .section-sub { color: rgba(255,255,255,0.5); }
+    .pricing-table {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,151,58,0.2);
+      border-radius: 16px; overflow: hidden;
+      max-width: 700px;
+    }
+    .pricing-row {
+      display: grid; grid-template-columns: 1fr auto;
+      padding: 16px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .pricing-row:last-child { border-bottom: none; }
+    .pricing-row:hover { background: rgba(200,151,58,0.06); }
+    .pricing-row.header {
+      background: rgba(200,151,58,0.12);
+      padding: 14px 28px;
+    }
+    .pricing-row.header span {
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .item-name { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+    .item-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--gold-light); font-weight: 500;
+    }
+    .price-note {
+      margin-top: 20px; font-size: 0.82rem;
+      color: rgba(255,255,255,0.35); font-style: italic;
+    }
+
+    /* WHY US */
+    .why {
+      padding: 100px 6%;
+      background: var(--light);
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-top: 48px;
+    }
+    .why-card {
+      background: var(--white); border-radius: 10px;
+      padding: 28px 24px; display: flex; gap: 16px; align-items: flex-start;
+    }
+    .why-dot {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(200,151,58,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .why-text h4 {
+      font-size: 0.95rem; font-weight: 500;
+      color: var(--navy); margin-bottom: 5px;
+    }
+    .why-text p { font-size: 0.83rem; color: var(--gray); line-height: 1.6; }
+
+    /* CONTACT */
+    .contact {
+      padding: 100px 6%;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    @media (max-width: 700px) {
+      .contact { grid-template-columns: 1fr; gap: 40px; }
+    }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--navy); margin-bottom: 16px;
+    }
+    .contact-info p {
+      font-size: 0.95rem; color: var(--gray);
+      line-height: 1.75; margin-bottom: 32px; font-weight: 300;
+    }
+    .contact-detail {
+      display: flex; gap: 14px; align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: rgba(200,151,58,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-text strong { display: block; font-size: 0.82rem; color: var(--gold); font-weight: 500; margin-bottom: 3px; }
+    .contact-text span { font-size: 0.92rem; color: var(--navy); }
+    .whatsapp-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366; color: white;
+      padding: 14px 28px; border-radius: 8px;
+      font-weight: 500; font-size: 0.95rem;
+      text-decoration: none; margin-top: 28px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .whatsapp-btn:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+    .map-box {
+      background: var(--navy);
+      border-radius: 16px; overflow: hidden;
+      aspect-ratio: 1 / 1;
+    }
+    .map-box iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      padding: 32px 6%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer .logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold); font-size: 1.1rem;
+    }
+    footer p { font-size: 0.8rem; color: rgba(255,255,255,0.35); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MOBILE NAV */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-badges { gap: 16px; }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <div class="shop-name" id="dispShopName">SAI AK DRY CLEANERS</div>
-    <div class="shop-sub">📍 <span id="dispAddress">Lucknow</span> &nbsp;|&nbsp; 📞 <span id="dispPhone">9999999999</span></div>
-  </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tabOrder" onclick="switchTab('order')">🧺 Place order</div>
-    <div class="tab" id="tabOwner" onclick="switchTab('owner')">⚙️ Owner panel</div>
-  </div>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SAI AK Dry Cleaners</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-  <div class="page active" id="pageOrder">
-    <div id="orderForm">
-      <p class="section-title" style="margin-bottom:12px">Select items</p>
-      <div id="itemList"></div>
-      <div class="summary-box" id="summaryBox" style="display:none">
-        <div id="summaryItems"></div>
-        <div class="summary-row" id="rowSubtotal"><span>Subtotal</span><span id="subtotalAmt"></span></div>
-        <div class="summary-row" id="rowDiscount" style="display:none"><span>Discount <span class="discount-badge" id="discLabel"></span></span><span id="discAmt" style="color:#0F6E56;font-weight:500"></span></div>
-        <div class="summary-row total"><span>Total</span><span id="totalAmt"></span></div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">✦ Lucknow's trusted dry cleaners</div>
+      <h1>Fresh clothes,<br/><span>zero hassle.</span></h1>
+      <p>Professional dry cleaning, laundry & ironing services in LDA Colony, Lucknow. We treat every garment with the care it deserves.</p>
+      <div class="hero-btns">
+        <a href="https://wa.me/91XXXXXXXXXX?text=Hello%2C%20I%20want%20to%20book%20a%20laundry%20service" class="btn-primary" id="wa-hero">
+          📱 Book on WhatsApp
+        </a>
+        <a href="#services" class="btn-outline">View Services</a>
       </div>
-      <p class="section-title" style="margin-top:18px;margin-bottom:12px">Your details</p>
-      <div class="form-group"><label class="form-label">Full name</label><input type="text" id="custName" placeholder="Ram Sharma"></div>
-      <div class="form-group"><label class="form-label">Phone number</label><input type="tel" id="custPhone" placeholder="9876543210" maxlength="10"></div>
-      <div class="form-group"><label class="form-label">Address</label><textarea id="custAddress" placeholder="House no, street, colony, Lucknow"></textarea></div>
-      <div class="form-group"><label class="form-label">Note (optional)</label><input type="text" id="custNote" placeholder="e.g. urgent, heavily soiled"></div>
-      <button class="btn-main" onclick="placeOrder()">Request Pickup</button>
-      <p class="hint">We will call you within 30 minutes to confirm</p>
-    </div>
-    <div id="successScreen" class="success-screen" style="display:none">
-      <div class="success-icon">✅</div>
-      <div class="success-title">Order placed!</div>
-      <div class="success-sub">Thank you <strong id="succName"></strong>!<br>We will call you on <strong id="succPhone"></strong> shortly.</div>
-      <div class="succ-box">
-        <div class="succ-box-label">Order summary</div>
-        <div class="succ-items" id="succItems"></div>
-        <div class="succ-total">Total: <span id="succTotal"></span></div>
+      <div class="hero-badges">
+        <div class="badge">
+          <div class="badge-num">5+</div>
+          <div class="badge-label">Years of service</div>
+        </div>
+        <div class="badge">
+          <div class="badge-num">500+</div>
+          <div class="badge-label">Happy customers</div>
+        </div>
+        <div class="badge">
+          <div class="badge-num">24hr</div>
+          <div class="badge-label">Express delivery</div>
+        </div>
       </div>
-      <button class="btn-outline" onclick="resetOrder()">Place another order</button>
     </div>
-  </div>
+  </section>
 
-  <div class="page" id="pageOwner">
-    <div id="pinScreen" class="pin-screen">
-      <div class="pin-title">🔒 Owner login</div>
-      <div class="pin-sub">Enter your 4-digit PIN</div>
-      <input class="pin-input" type="password" id="pinInput" maxlength="4" placeholder="••••" oninput="checkPin()">
-      <div class="pin-err" id="pinErr"></div>
-      <p style="font-size:12px;color:#bbb">Default PIN: 1234</p>
-    </div>
-    <div id="ownerPanel" style="display:none;padding:1rem">
-      <div class="owner-section">
-        <p class="section-title">Shop info</p>
-        <div class="edit-row"><div><div class="edit-label" id="oShopName">SAI AK DRY CLEANERS</div><div class="edit-val">Shop name</div></div><span class="edit-btn" onclick="openModal('shopName')">Edit</span></div>
-        <div class="edit-row"><div><div class="edit-label" id="oPhone">9999999999</div><div class="edit-val">Phone number</div></div><span class="edit-btn" onclick="openModal('phone')">Edit</span></div>
-        <div class="edit-row"><div><div class="edit-label" id="oAddress">Lucknow</div><div class="edit-val">Address</div></div><span class="edit-btn" onclick="openModal('address')">Edit</span></div>
-        <div class="edit-row"><div><div class="edit-label">PIN</div><div class="edit-val">Owner login PIN</div></div><span class="edit-btn" onclick="openModal('pin')">Change</span></div>
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-tag">What we offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">From everyday clothes to delicate fabrics — we handle it all with professional care.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">👔</div>
+        <div class="service-name">Dry Cleaning</div>
+        <div class="service-desc">Chemical solvent cleaning for delicate fabrics like suits, sarees, sherwani, and woollen garments.</div>
+        <div class="service-price">Starting ₹80 per piece</div>
       </div>
-      <div class="owner-section">
-        <p class="section-title">Price list</p>
-        <div id="priceEditor"></div>
+      <div class="service-card">
+        <div class="service-icon">🧺</div>
+        <div class="service-name">Laundry & Wash</div>
+        <div class="service-desc">Machine and hand wash for daily clothes, bedsheets, curtains, and more. Fresh and soft finish.</div>
+        <div class="service-price">Starting ₹20 per piece</div>
       </div>
-      <div class="owner-section">
-        <p class="section-title">Discounts</p>
-        <div id="discountEditor"></div>
+      <div class="service-card">
+        <div class="service-icon">👗</div>
+        <div class="service-name">Ironing & Press</div>
+        <div class="service-desc">Crisp, wrinkle-free pressing for shirts, trousers, kurtas, sarees, and all types of garments.</div>
+        <div class="service-price">Starting ₹10 per piece</div>
       </div>
-      <button class="lock-btn" onclick="lockPanel()">🔒 Lock panel</button>
+      <div class="service-card">
+        <div class="service-icon">🛋️</div>
+        <div class="service-name">Home Furnishings</div>
+        <div class="service-desc">Deep cleaning for curtains, bedsheets, blankets, quilts, sofa covers, and carpets.</div>
+        <div class="service-price">Starting ₹150 per piece</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎽</div>
+        <div class="service-name">Bridal & Special Wear</div>
+        <div class="service-desc">Expert care for lehengas, sherwanis, wedding suits, and heavy embroidered garments.</div>
+        <div class="service-price">Starting ₹300 per piece</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">Express Service</div>
+        <div class="service-desc">Same day or next day delivery for urgent orders. Call us before 10 AM for same-day pickup.</div>
+        <div class="service-price">Small extra charge applies</div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-title" id="modalTitle">Edit</div>
-    <input id="modalInput" placeholder="">
-    <input id="modalInput2" placeholder="" style="display:none">
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveModal()">Save</button>
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="section-tag">Transparent rates</div>
+    <h2 class="section-title">Pricing</h2>
+    <p class="section-sub">No hidden charges. What you see is what you pay.</p>
+    <div class="pricing-table">
+      <div class="pricing-row header">
+        <span>Item</span>
+        <span>Price</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Shirt / T-shirt (wash + iron)</span>
+        <span class="item-price">₹25</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Trouser / Jeans</span>
+        <span class="item-price">₹30</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Suit (dry clean)</span>
+        <span class="item-price">₹200</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Saree (dry clean)</span>
+        <span class="item-price">₹150</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Sherwani</span>
+        <span class="item-price">₹350</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Blanket / Quilt</span>
+        <span class="item-price">₹200</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Curtain (per piece)</span>
+        <span class="item-price">₹80</span>
+      </div>
+      <div class="pricing-row">
+        <span class="item-name">Bedsheet (double)</span>
+        <span class="item-price">₹60</span>
+      </div>
     </div>
-  </div>
-</div>
+    <p class="price-note">* Prices may vary slightly based on fabric type and condition. Final price confirmed at drop-off.</p>
+  </section>
 
-<script>
-var state={
-  shopName:'SAI AK DRY CLEANERS',
-  phone:'9999999999',
-  address:'Lucknow',
-  pin:'1234',
-  items:[
-    {id:1,name:'Shirt + Pant (wash & iron)',price:100},
-    {id:2,name:'Blanket — single bed',price:300},
-    {id:3,name:'Blanket — double bed',price:400},
-    {id:4,name:'Saree',price:150},
-    {id:5,name:'Jacket',price:200},
-    {id:6,name:'Coat pant',price:200},
-    {id:7,name:'Full suit',price:250},
-  ],
-  discounts:[
-    {id:'first',label:'First order',desc:'10% off',enabled:true},
-    {id:'500',label:'Above ₹500',desc:'₹50 off',enabled:true,condition:500,flat:50},
-    {id:'1000',label:'Above ₹1000',desc:'₹120 off',enabled:true,condition:1000,flat:120},
-  ],
-  qty:{},
-  isFirstOrder:true,
-  currentModal:null,
-  currentEditIdx:null
-};
+  <!-- WHY US -->
+  <section class="why">
+    <div class="section-tag">Why choose us</div>
+    <h2 class="section-title">The SAI AK difference</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-dot">🏠</div>
+        <div class="why-text">
+          <h4>Local & trusted</h4>
+          <p>Serving LDA Colony and nearby areas for years. Your neighbours trust us.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-dot">✨</div>
+        <div class="why-text">
+          <h4>Spotless results</h4>
+          <p>Professional cleaning that removes tough stains and odours completely.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-dot">⏰</div>
+        <div class="why-text">
+          <h4>On-time delivery</h4>
+          <p>We respect your time. Your clothes are ready when promised, always.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-dot">💰</div>
+        <div class="why-text">
+          <h4>Honest pricing</h4>
+          <p>Transparent rates with no surprise charges. Quality service at fair prices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-function switchTab(t){
-  document.getElementById('tabOrder').classList.toggle('active',t==='order');
-  document.getElementById('tabOwner').classList.toggle('active',t==='owner');
-  document.getElementById('pageOrder').classList.toggle('active',t==='order');
-  document.getElementById('pageOwner').classList.toggle('active',t==='owner');
-}
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-info">
+      <div class="section-tag">Find us</div>
+      <h2>Visit or call us</h2>
+      <p>We're open 7 days a week. Drop your clothes anytime or WhatsApp us to schedule a pickup.</p>
+      <div class="contact-detail">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text">
+          <strong>Address</strong>
+          <span>Sector D1, LDA Colony, Springdale Road, Lucknow, UP</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text">
+          <strong>Phone / WhatsApp</strong>
+          <span id="phone-display">+91 XXXXXXXXXX</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">🕐</div>
+        <div class="contact-text">
+          <strong>Hours</strong>
+          <span>Mon – Sat: 8 AM – 8 PM &nbsp;|&nbsp; Sun: 9 AM – 5 PM</span>
+        </div>
+      </div>
+      <a href="https://wa.me/91XXXXXXXXXX?text=Hello%2C%20I%20want%20to%20enquire%20about%20your%20services" class="whatsapp-btn" id="wa-contact">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.855L.057 23.286a.75.75 0 0 0 .916.932l5.578-1.461A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.693-.498-5.243-1.369l-.374-.218-3.875 1.016 1.035-3.78-.238-.389A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Chat on WhatsApp
+      </a>
+    </div>
+    <div class="map-box">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.4!2d80.9345!3d26.8467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zTERBIENvbG9ueSwgTHVja25vdw!5e0!3m2!1sen!2sin!4v1"
+        allowfullscreen loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
 
-function renderItems(){
-  var html='';
-  state.items.forEach(function(item){
-    var q=state.qty[item.id]||0;
-    html+='<div class="item-row"><div class="item-name">'+item.name+'</div><div class="item-price">₹'+item.price+'</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('+item.id+',-1)">−</button><span class="qty-num">'+q+'</span><button class="qty-btn" onclick="changeQty('+item.id+',1)">+</button></div></div>';
-  });
-  document.getElementById('itemList').innerHTML=html;
-  updateSummary();
-}
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">SAI AK Dry Cleaners</div>
+    <p>© 2026 SAI AK Dry Cleaners, LDA Colony, Lucknow</p>
+    <p style="color:rgba(255,255,255,0.2);font-size:0.75rem">Built with ❤️ by the owner's son</p>
+  </footer>
 
-function changeQty(id,delta){
-  state.qty[id]=(state.qty[id]||0)+delta;
-  if(state.qty[id]<0)state.qty[id]=0;
-  renderItems();
-}
-
-function calcOrder(){
-  var subtotal=0,lines=[];
-  state.items.forEach(function(item){
-    var q=state.qty[item.id]||0;
-    if(q>0){subtotal+=q*item.price;lines.push({name:item.name,qty:q,amt:q*item.price});}
-  });
-  var discount=0,discLabel='';
-  if(state.discounts[2].enabled&&subtotal>=1000){discount=120;discLabel='₹120 off above ₹1000';}
-  else if(state.discounts[1].enabled&&subtotal>=500){discount=50;discLabel='₹50 off above ₹500';}
-  if(state.discounts[0].enabled&&state.isFirstOrder){
-    var fd=Math.round(subtotal*0.10);
-    if(fd>discount){discount=fd;discLabel='10% first order';}
-  }
-  return{subtotal:subtotal,discount:discount,discLabel:discLabel,total:Math.max(0,subtotal-discount),lines:lines};
-}
-
-function updateSummary(){
-  var c=calcOrder();
-  var box=document.getElementById('summaryBox');
-  if(c.lines.length===0){box.style.display='none';return;}
-  box.style.display='block';
-  var si='';
-  c.lines.forEach(function(l){si+='<div class="summary-row"><span>'+l.name+' × '+l.qty+'</span><span>₹'+l.amt+'</span></div>';});
-  document.getElementById('summaryItems').innerHTML=si;
-  document.getElementById('subtotalAmt').textContent='₹'+c.subtotal;
-  var rd=document.getElementById('rowDiscount');
-  if(c.discount>0){rd.style.display='flex';document.getElementById('discLabel').textContent=c.discLabel;document.getElementById('discAmt').textContent='−₹'+c.discount;}
-  else rd.style.display='none';
-  document.getElementById('totalAmt').textContent='₹'+c.total;
-}
-
-function placeOrder(){
-  var name=document.getElementById('custName').value.trim();
-  var phone=document.getElementById('custPhone').value.trim();
-  var address=document.getElementById('custAddress').value.trim();
-  var c=calcOrder();
-  if(!name){alert('Please enter your name');return;}
-  if(!phone||phone.length<10){alert('Please enter a valid 10-digit phone number');return;}
-  if(!address){alert('Please enter your address');return;}
-  if(c.lines.length===0){alert('Please select at least one item');return;}
-  state.isFirstOrder=false;
-  document.getElementById('succName').textContent=name;
-  document.getElementById('succPhone').textContent=phone;
-  var si='';
-  c.lines.forEach(function(l){si+=l.name+' × '+l.qty+' = ₹'+l.amt+'<br>';});
-  if(c.discount>0)si+='<span style="color:#0F6E56">Discount ('+c.discLabel+'): −₹'+c.discount+'</span><br>';
-  document.getElementById('succItems').innerHTML=si;
-  document.getElementById('succTotal').textContent='₹'+c.total;
-  document.getElementById('orderForm').style.display='none';
-  document.getElementById('successScreen').style.display='block';
-}
-
-function resetOrder(){
-  state.qty={};
-  document.getElementById('custName').value='';
-  document.getElementById('custPhone').value='';
-  document.getElementById('custAddress').value='';
-  document.getElementById('custNote').value='';
-  document.getElementById('orderForm').style.display='block';
-  document.getElementById('successScreen').style.display='none';
-  renderItems();
-}
-
-function checkPin(){
-  var v=document.getElementById('pinInput').value;
-  if(v.length===4){
-    if(v===state.pin){
-      document.getElementById('pinScreen').style.display='none';
-      document.getElementById('ownerPanel').style.display='block';
-      renderOwnerPanel();
-      document.getElementById('pinInput').value='';
-      document.getElementById('pinErr').textContent='';
-    } else {
-      document.getElementById('pinErr').textContent='Wrong PIN. Try again.';
-      document.getElementById('pinInput').value='';
-    }
-  }
-}
-
-function lockPanel(){
-  document.getElementById('ownerPanel').style.display='none';
-  document.getElementById('pinScreen').style.display='block';
-}
-
-function renderOwnerPanel(){
-  document.getElementById('oShopName').textContent=state.shopName;
-  document.getElementById('oPhone').textContent=state.phone;
-  document.getElementById('oAddress').textContent=state.address;
-  document.getElementById('dispShopName').textContent=state.shopName;
-  document.getElementById('dispPhone').textContent=state.phone;
-  document.getElementById('dispAddress').textContent=state.address;
-  var pe='';
-  state.items.forEach(function(item,i){
-    pe+='<div class="edit-row"><div><div class="edit-label">'+item.name+'</div><div class="edit-val">₹'+item.price+'</div></div><span class="edit-btn" onclick="openModal(\'price\','+i+')">Edit</span></div>';
-  });
-  document.getElementById('priceEditor').innerHTML=pe;
-  var de='';
-  state.discounts.forEach(function(d,i){
-    de+='<div class="disc-row"><div><div>'+d.label+'</div><div class="disc-desc">'+d.desc+'</div></div><div class="toggle '+(d.enabled?'on':'')+'" onclick="toggleDiscount('+i+')"><div class="toggle-knob"></div></div></div>';
-  });
-  document.getElementById('discountEditor').innerHTML=de;
-}
-
-function toggleDiscount(i){
-  state.discounts[i].enabled=!state.discounts[i].enabled;
-  renderOwnerPanel();
-  updateSummary();
-}
-
-var modalTarget='',modalIdx=null;
-function openModal(target,idx){
-  modalTarget=target;modalIdx=idx;
-  var t=document.getElementById('modalTitle');
-  var inp=document.getElementById('modalInput');
-  var inp2=document.getElementById('modalInput2');
-  inp2.style.display='none';
-  if(target==='shopName'){t.textContent='Edit shop name';inp.value=state.shopName;inp.placeholder='Shop name';}
-  else if(target==='phone'){t.textContent='Edit phone number';inp.value=state.phone;inp.placeholder='Phone number';}
-  else if(target==='address'){t.textContent='Edit address';inp.value=state.address;inp.placeholder='Address';}
-  else if(target==='pin'){t.textContent='Change PIN';inp.value='';inp.placeholder='New 4-digit PIN';inp2.style.display='block';inp2.value='';inp2.placeholder='Confirm new PIN';}
-  else if(target==='price'){t.textContent='Edit price — '+state.items[idx].name;inp.value=state.items[idx].price;inp.placeholder='Price in ₹';}
-  document.getElementById('modalOverlay').classList.add('open');
-}
-
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
-
-function saveModal(){
-  var v=document.getElementById('modalInput').value.trim();
-  var v2=document.getElementById('modalInput2').value.trim();
-  if(!v){alert('Please enter a value');return;}
-  if(modalTarget==='shopName')state.shopName=v;
-  else if(modalTarget==='phone')state.phone=v;
-  else if(modalTarget==='address')state.address=v;
-  else if(modalTarget==='pin'){
-    if(v.length!==4||isNaN(v)){alert('PIN must be exactly 4 digits');return;}
-    if(v!==v2){alert('PINs do not match. Try again.');return;}
-    state.pin=v;
-  }
-  else if(modalTarget==='price'){
-    var p=parseInt(v);
-    if(isNaN(p)||p<0){alert('Enter a valid price');return;}
-    state.items[modalIdx].price=p;
-  }
-  closeModal();
-  renderOwnerPanel();
-  renderItems();
-}
-
-renderItems();
-</script>
 </body>
 </html>

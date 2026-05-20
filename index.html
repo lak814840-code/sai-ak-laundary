@@ -324,9 +324,10 @@
     /* CUSTOMER DATA INPUTS STYLING */
     .cust-input {
       width: 100%;
-      max-width: 340px;
-      padding: 10px 14px;
-      margin-bottom: 14px;
+      max-width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      margin-bottom: 16px;
       border-radius: 6px;
       border: 1px solid rgba(200,151,58,0.4);
       background: rgba(255,255,255,0.06);
@@ -515,28 +516,28 @@
       </div>
     </div>
 
-    <div id="order-summary-box" style="display: none; max-width: 700px; margin: 30px auto 0; background: rgba(255,255,255,0.08); padding: 24px; border-radius: 12px; border: 1px solid var(--gold); text-align: center;">
-      <h3 style="color: var(--white); font-family: 'Playfair Display', serif; margin-bottom: 20px;">Complete Your Booking</h3>
+    <div style="max-width: 700px; margin: 35px auto 0; background: rgba(255,255,255,0.04); padding: 24px; border-radius: 12px; border: 1px solid rgba(200,151,58,0.25); text-align: left;">
+      <h3 style="color: var(--white); font-family: 'Playfair Display', serif; margin-bottom: 18px; text-align: center; font-size: 1.3rem;">📋 Customer & Pickup Details</h3>
       
-      <div style="margin-bottom: 20px; text-align: left; max-width: 340px; margin: 0 auto 20px;">
-        <label style="color: var(--gold-light); font-size: 0.9rem; display: block; margin-bottom: 6px; font-weight: 500;">👤 Customer Name:</label>
-        <input type="text" id="cust-name" class="cust-input" placeholder="Enter full name">
+      <div style="max-width: 450px; margin: 0 auto;">
+        <label style="color: var(--gold-light); font-size: 0.9rem; font-weight: 500;">👤 Full Name:</label>
+        <input type="text" id="cust-name" class="cust-input" placeholder="Enter your name">
         
-        <label style="color: var(--gold-light); font-size: 0.9rem; display: block; margin-bottom: 6px; font-weight: 500;">📱 Customer Mobile No:</label>
-        <input type="tel" id="cust-phone" class="cust-input" placeholder="Enter 10-digit number">
+        <label style="color: var(--gold-light); font-size: 0.9rem; font-weight: 500;">📱 Mobile Number:</label>
+        <input type="tel" id="cust-phone" class="cust-input" placeholder="Enter 10-digit phone number">
         
-        <label style="color: var(--gold-light); font-size: 0.9rem; display: block; margin-bottom: 6px; font-weight: 500;">📍 Pickup & Delivery Address:</label>
-        <textarea id="cust-address" class="cust-input" rows="2" placeholder="Complete home address with landmark" style="resize: none;"></textarea>
+        <label style="color: var(--gold-light); font-size: 0.9rem; font-weight: 500;">📍 Home Address:</label>
+        <textarea id="cust-address" class="cust-input" rows="3" placeholder="Complete address with house number, street, and landmark" style="resize: none;"></textarea>
       </div>
 
-      <div style="color: rgba(255,255,255,0.85); margin: 20px auto; font-size: 1.05rem; text-align: left; max-width: 340px; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+      <div style="color: rgba(255,255,255,0.85); margin: 20px auto; font-size: 1.05rem; text-align: left; max-width: 450px; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
         <p style="margin-bottom: 6px;">Subtotal: <span id="bill-subtotal" style="float:right; color:var(--white);">₹0</span></p>
         <p id="bill-discount-row" style="margin-bottom: 6px; color: #25D366; font-size: 0.95rem; display:none;"><span id="bill-discount-reason">Discount</span>: <span id="bill-discount-amount" style="float:right;">-₹0</span></p>
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 10px 0;">
         <p style="font-weight: bold; color: var(--gold-light); font-size: 1.25rem; margin-top: 4px;">Total Payable: <span id="bill-final" style="float:right;">₹0</span></p>
       </div>
 
-      <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 20px;">Send order summary via WhatsApp to:</p>
+      <p style="color: rgba(255,255,255,0.65); font-size: 0.88rem; text-align: center; margin-bottom: 16px;">Click any number below to send order summary via WhatsApp:</p>
       
       <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
         <button onclick="sendOrder(1)" class="btn-primary" style="margin: 5px;">
@@ -647,17 +648,16 @@
         }
       });
 
-      const summaryBox = document.getElementById('order-summary-box');
       const subtotalDisplay = document.getElementById('bill-subtotal');
       const discountRow = document.getElementById('bill-discount-row');
       const discountReasonDisplay = document.getElementById('bill-discount-reason');
       const discountAmountDisplay = document.getElementById('bill-discount-amount');
       const finalDisplay = document.getElementById('bill-final');
 
-      if (hasItems) {
-        let discount = 0;
-        let discountReason = "";
+      let discount = 0;
+      let discountReason = "";
 
+      if (hasItems) {
         if (totalBill >= 1000) {
           discount = 100;
           discountReason = "Flat ₹100 Off (Order above ₹1000)";
@@ -668,22 +668,19 @@
           discount = Math.round(totalBill * 0.1);
           discountReason = "First Order 10% Discount";
         }
-
-        let finalBill = totalBill - discount;
-
-        subtotalDisplay.innerText = `₹${totalBill}`;
-        if (discount > 0) {
-          discountRow.style.display = 'block';
-          discountReasonDisplay.innerText = `🎁 ${discountReason}`;
-          discountAmountDisplay.innerText = `-₹${discount}`;
-        } else {
-          discountRow.style.display = 'none';
-        }
-        finalDisplay.innerText = `₹${finalBill}`;
-        summaryBox.style.display = 'block';
-      } else {
-        summaryBox.style.display = 'none';
       }
+
+      let finalBill = totalBill - discount;
+
+      subtotalDisplay.innerText = `₹${totalBill}`;
+      if (discount > 0) {
+        discountRow.style.display = 'block';
+        discountReasonDisplay.innerText = `🎁 ${discountReason}`;
+        discountAmountDisplay.innerText = `-₹${discount}`;
+      } else {
+        discountRow.style.display = 'none';
+      }
+      finalDisplay.innerText = `₹${finalBill}`;
     }
 
     // Full validation & dynamic message submission router
@@ -715,7 +712,13 @@
         }
       });
 
-      // 4. Calculate Final pricing arrays
+      // 4. Stop if no items are selected
+      if (totalBill === 0) {
+        alert("⚠️ Please select at least one item from the list above before placing an order!");
+        return;
+      }
+
+      // 5. Calculate Final pricing arrays
       let discount = 0;
       let discountReason = "";
       if (totalBill >= 1000) {
@@ -730,7 +733,7 @@
       }
       let finalBill = totalBill - discount;
 
-      // 5. Construct highly clean, professional business message text
+      // 6. Construct highly clean, professional business message text
       let textMessage = `Hello *SAI AK Dry Cleaners*,\nI want to place a booking order from your website.\n\n`;
       textMessage += `👤 *CUSTOMER DETAILS*\n`;
       textMessage += `━━━━━━━━━━━━━━━\n`;
@@ -748,12 +751,12 @@
       }
       textMessage += `💰 *Total Payable Amount:* *₹${finalBill}*`;
 
-      // 6. Router distribution targets
+      // 7. Router distribution targets
       const num1 = "919415174928";
       const num2 = "919935830928";
       const chosenNumber = (numberOption === 1) ? num1 : num2;
 
-      // 7. Fire window client intent
+      // 8. Fire window client intent
       const finalWhatsAppURL = `https://wa.me/${chosenNumber}?text=${encodeURIComponent(textMessage)}`;
       window.open(finalWhatsAppURL, '_blank');
     }
